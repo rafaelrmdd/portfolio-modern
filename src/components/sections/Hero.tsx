@@ -53,7 +53,14 @@ export function Hero() {
       id="top"
       className="scanlines relative min-h-dvh overflow-hidden"
     >
-      <CityScene />
+      {/* On a portrait viewport the scene is scaled to cover a very tall box,
+          which puts the figure directly behind the tagline — dark type on a
+          dark coat. Confining the artwork to the upper hero on small screens
+          keeps the copy on flat background, and a scrim cannot fix it: the
+          text sits too far up the gradient to ever be opaque enough. */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[62%] lg:h-full">
+        <CityScene />
+      </div>
 
       {/* Legibility scrims: one from the left for the type column, one from the
           bottom to seat the whole scene on the page background. */}
@@ -102,11 +109,8 @@ export function Hero() {
       </div>
 
       {/* Vertical scroll cue, riding the right edge below the rail. */}
-      <div className="pointer-events-none absolute bottom-8 right-6 z-20 hidden items-center gap-3 lg:flex lg:flex-col">
-        <span
-          className="hud"
-          style={{ writingMode: "vertical-rl" }}
-        >
+      <div className="pointer-events-none absolute bottom-10 right-8 z-20 hidden items-center gap-3 lg:flex lg:flex-col">
+        <span className="hud text-fg/70" style={{ writingMode: "vertical-rl" }}>
           {t.hero.scrollHint}
         </span>
         <span className="h-14 w-px bg-linear-to-b from-line to-accent" />

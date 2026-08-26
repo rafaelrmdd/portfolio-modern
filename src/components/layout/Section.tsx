@@ -20,7 +20,7 @@ export function Section({
   const index = String(SECTION_IDS.indexOf(id) + 1).padStart(2, "0");
 
   return (
-    <section id={id} className="scroll-mt-20 border-t border-line py-16 sm:py-24">
+    <section id={id} className="scroll-mt-20 border-t border-line py-14 sm:py-20">
       <Container>
         <div className="grid gap-6 lg:grid-cols-[auto_1fr] lg:gap-16">
           <Reveal>
@@ -41,7 +41,7 @@ export function Section({
           </Reveal>
         </div>
 
-        <div className="mt-10 sm:mt-14">{children}</div>
+        <div className="mt-9 sm:mt-12">{children}</div>
       </Container>
     </section>
   );

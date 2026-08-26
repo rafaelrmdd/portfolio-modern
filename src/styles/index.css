@@ -192,8 +192,13 @@
     color: #fff;
   }
 
+  /* Tinted rather than transparent: this button sits over the hero artwork,
+     where a bare outline leaves foreground-coloured text on whatever the
+     scene happens to be behind it. */
   .btn-ghost {
     box-shadow: inset 0 0 0 1px var(--line);
+    background-color: color-mix(in oklab, var(--bg) 62%, transparent);
+    backdrop-filter: blur(10px);
     color: var(--fg);
   }
 
