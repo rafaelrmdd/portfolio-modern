@@ -60,12 +60,13 @@ export type Dictionary = {
     tagline: string;
     primaryCta: string;
     secondaryCta: string;
-    visualPlaceholder: string;
-    visualHint: string;
+    scrollHint: string;
+    hud: { location: string; signal: string };
   };
   about: {
     label: string;
     heading: string;
+    quote: string;
     paragraphs: readonly string[];
     facts: readonly { label: string; value: string }[];
   };
@@ -87,6 +88,7 @@ export type Dictionary = {
     label: string;
     heading: string;
     intro: string;
+    availability: string;
     emailCta: string;
     email: string;
     socials: readonly SocialLink[];
@@ -128,12 +130,14 @@ const en: Dictionary = {
       "I build web interfaces that are fast, sharp, and a little louder than they need to be.",
     primaryCta: "See the work",
     secondaryCta: "Get in touch",
-    visualPlaceholder: "Hero visual",
-    visualHint: "Reserved — WebGL scene drops in here",
+    scrollHint: "Scroll",
+    hud: { location: "Your City / UTC-3", signal: "Est. 2026" },
   },
   about: {
     label: "About",
     heading: "Short version",
+    quote:
+      "Placeholder pull quote. One sharp line about how you work, not what you know.",
     paragraphs: [
       "Placeholder bio. Two or three sentences on what you build, what you care about, and what you are looking for. Keep it concrete — the reader is skimming.",
       "A second paragraph is optional. Use it for the thing that makes you different rather than the thing every developer says.",
@@ -213,6 +217,7 @@ const en: Dictionary = {
     heading: "Let us talk",
     intro:
       "The fastest way to reach me is email. I read everything and reply to most of it.",
+    availability: "Open to new work",
     emailCta: "Send an email",
     email: "you@example.com",
     socials: [
@@ -258,12 +263,14 @@ const pt: Dictionary = {
       "Construo interfaces web rápidas, afiadas e um pouco mais barulhentas do que precisariam ser.",
     primaryCta: "Ver os projetos",
     secondaryCta: "Entrar em contato",
-    visualPlaceholder: "Visual do hero",
-    visualHint: "Reservado — a cena WebGL entra aqui",
+    scrollHint: "Role",
+    hud: { location: "Sua Cidade / UTC-3", signal: "Desde 2026" },
   },
   about: {
     label: "Sobre",
     heading: "Versão curta",
+    quote:
+      "Citação de exemplo. Uma frase afiada sobre como você trabalha, não sobre o que você sabe.",
     paragraphs: [
       "Bio de exemplo. Duas ou três frases sobre o que você constrói, com o que se importa e o que está procurando. Seja concreto — quem lê está passando o olho.",
       "O segundo parágrafo é opcional. Use para aquilo que te diferencia, não para o que todo desenvolvedor escreve.",
@@ -343,6 +350,7 @@ const pt: Dictionary = {
     heading: "Vamos conversar",
     intro:
       "O jeito mais rápido de me achar é por e-mail. Leio tudo e respondo quase tudo.",
+    availability: "Aberto a novos trabalhos",
     emailCta: "Mandar um e-mail",
     email: "voce@exemplo.com",
     socials: [

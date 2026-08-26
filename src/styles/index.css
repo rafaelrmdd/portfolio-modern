@@ -5,39 +5,80 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ---------------------------------------------------------------------------
-   Palette — "Ember": a warm duotone (crimson to amber) on a near-neutral base.
-   Deliberately not the indigo/violet gradient every portfolio ships with.
-   Both themes are designed, not derived: the light theme deepens the accent so
-   it keeps contrast on paper-white, the dark theme brightens it so it glows.
+   Palette
+
+   Dark  — "Night City": blue-black, never neutral grey, lit by a rose/cyan
+           neon pair. The accents are the only saturated things on the page.
+   Light — "Concrete": unbleached warm concrete, deliberately NOT white. The
+           reference is an overcast smog-lit afternoon, so the neons survive
+           into daylight as deep ink versions of themselves rather than
+           washing out.
+
+   Both themes are authored separately. Nothing here is derived by inverting
+   the other, which is why the light theme is warm and the dark one is cold.
 --------------------------------------------------------------------------- */
 :root {
-  --bg: #faf9f7;
-  --surface: #ffffff;
-  --elevated: #f2f0ed;
-  --fg: #0b0b0d;
-  --muted: #63636b;
-  --line: #e3e0dc;
+  --bg: #ded7c8;
+  --surface: #e7e1d3;
+  --elevated: #cdc4b1;
+  --fg: #14121a;
+  --muted: #565064;
+  --line: #bfb5a1;
 
-  --accent: #d81e56;
-  --grad-from: #ff2e63;
-  --grad-to: #ff9f1c;
+  --accent: #b8004f;
+  --accent-2: #00697a;
+  --grad-from: #d4006a;
+  --grad-to: #007e92;
 
-  --glow: 255 46 99;
+  --glow: 212 0 106;
+
+  /* Scene — an overcast, smog-lit afternoon. Each depth layer steps down in
+     value by a wide margin; the first pass kept them close together and the
+     skyline dissolved into the sky. */
+  --scene-sky-1: #b3a78e;
+  --scene-sky-2: #d8c6a4;
+  --scene-sun: #f7eed8;
+  --scene-haze: #cbb994;
+  --scene-far: #94886f;
+  --scene-mid: #6f6553;
+  --scene-near: #4a443b;
+  --scene-fore: #201d1c;
+  --scene-figure: #0d0b10;
+  --scene-window: #fff4d6;
+  --scene-neon-a: #b8004f;
+  --scene-neon-b: #006072;
+  --scene-rain: #57503f;
 }
 
 .dark {
-  --bg: #08080a;
-  --surface: #111114;
-  --elevated: #1a1a1f;
-  --fg: #f6f5f3;
-  --muted: #8f8f99;
-  --line: #26262c;
+  --bg: #06060c;
+  --surface: #0d0d18;
+  --elevated: #16162a;
+  --fg: #edebff;
+  --muted: #8a86ad;
+  --line: #232038;
 
-  --accent: #ff5c85;
-  --grad-from: #ff4d7d;
-  --grad-to: #ffb443;
+  --accent: #ff2e7e;
+  --accent-2: #2be8ff;
+  --grad-from: #ff2e7e;
+  --grad-to: #2be8ff;
 
-  --glow: 255 77 125;
+  --glow: 255 46 126;
+
+  /* Scene — night, lit from the horizon up. */
+  --scene-sky-1: #05050d;
+  --scene-sky-2: #2a1038;
+  --scene-sun: #ff5f9e;
+  --scene-haze: #46184f;
+  --scene-far: #171334;
+  --scene-mid: #100c24;
+  --scene-near: #0a0817;
+  --scene-fore: #04040a;
+  --scene-figure: #010104;
+  --scene-window: #ffd9a0;
+  --scene-neon-a: #ff2e7e;
+  --scene-neon-b: #2be8ff;
+  --scene-rain: #7b74b8;
 }
 
 @theme inline {
@@ -48,20 +89,20 @@
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
   --color-grad-from: var(--grad-from);
   --color-grad-to: var(--grad-to);
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    Roboto, Helvetica, Arial, sans-serif;
-  --font-display: "Bricolage Grotesque", "Inter", ui-sans-serif, system-ui,
-    sans-serif;
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-display: "Anton", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    /* keeps anchored sections clear of the sticky header */
-    scroll-padding-top: 6rem;
+    scroll-padding-top: 5rem;
     -webkit-text-size-adjust: 100%;
   }
 
@@ -69,8 +110,8 @@
     background-color: var(--bg);
     color: var(--fg);
     font-family: var(--font-sans);
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
   }
 
   ::selection {
@@ -81,11 +122,8 @@
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
-    border-radius: 2px;
   }
 
-  /* Theme swap should feel like a dimmer, not a cut. Scoped to the shell only —
-     applying it to every element makes hover states feel laggy. */
   html.theme-transition,
   html.theme-transition body {
     transition: background-color 400ms ease, color 400ms ease;
@@ -100,30 +138,50 @@
     color: transparent;
   }
 
+  /* The mono micro-label doing the HUD work all over the page. */
+  .hud {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .rule {
+    height: 1px;
+    background-image: linear-gradient(
+      to right,
+      var(--line),
+      var(--line) 60%,
+      transparent
+    );
+  }
+
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    border-radius: 9999px;
-    padding: 0.8rem 1.6rem;
-    font-size: 0.9375rem;
-    font-weight: 600;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 1.05rem 2rem;
     line-height: 1;
-    transition:
-      transform 200ms ease,
-      background-color 200ms ease,
-      color 200ms ease,
-      border-color 200ms ease;
+    /* Cut corner, top-right and bottom-left — the site has no rounded pills. */
+    clip-path: polygon(
+      0 0,
+      calc(100% - 0.7rem) 0,
+      100% 0.7rem,
+      100% 100%,
+      0.7rem 100%,
+      0 calc(100% - 0.7rem)
+    );
+    transition: background-color 200ms ease, color 200ms ease;
   }
 
-  .btn:active {
-    transform: translateY(1px);
-  }
-
-  /* Solid rather than gradient-filled: white text on the amber end of the
-     gradient fails contrast, and the gradient already carries the identity
-     through the headings and accents. */
   .btn-primary {
     background-color: var(--fg);
     color: var(--bg);
@@ -135,7 +193,7 @@
   }
 
   .btn-ghost {
-    border: 1px solid var(--line);
+    box-shadow: inset 0 0 0 1px var(--line);
     color: var(--fg);
   }
 
@@ -143,39 +201,137 @@
     background-color: var(--elevated);
   }
 
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
+  /* Outlined display type, used for the oversized section indices. */
+  .outlined {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--line);
   }
 
-  .eyebrow::before {
+  /* Outlined against artwork needs the foreground colour, not the hairline. */
+  .outlined-fg {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--fg);
+  }
+}
+
+@layer utilities {
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee var(--marquee-duration, 40s) linear infinite;
+  }
+
+  .marquee-track-reverse {
+    animation-direction: reverse;
+  }
+
+  .marquee-mask {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+  }
+
+  /* Film grain over the whole page. Cheap, and it kills the flat-vector look
+     that makes generated pages read as templates. */
+  .grain::after {
     content: "";
-    height: 0.45rem;
-    width: 0.45rem;
-    border-radius: 9999px;
-    background-image: linear-gradient(120deg, var(--grad-from), var(--grad-to));
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    pointer-events: none;
+    opacity: 0.055;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* Page atmosphere, not the hero visual - that slot stays deliberately empty.
-     Delete this block and its usage in Hero to remove it entirely. */
-  .gradient-wash {
-    background:
-      radial-gradient(
-        60rem 32rem at 15% -10%,
-        rgb(var(--glow) / 0.16),
-        transparent 70%
-      ),
-      radial-gradient(
-        40rem 26rem at 90% 0%,
-        rgb(var(--glow) / 0.09),
-        transparent 65%
-      );
+  /* Above the artwork, below the content — at z-30 it striped the buttons. */
+  .dark .scanlines::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgb(0 0 0 / 0.22) 0 1px,
+      transparent 1px 3px
+    );
+  }
+}
+
+.scene-layer {
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Values are in SVG user units, not percentages: the rain group lives inside a
+   1600x900 viewBox, so a px translate here scales with the artwork. */
+@keyframes rain-fall {
+  from {
+    transform: translate3d(0, -260px, 0);
+  }
+  to {
+    transform: translate3d(-64px, 960px, 0);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(-1.2%, 0, 0);
+  }
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 1;
+  }
+  44% {
+    opacity: 0.35;
+  }
+  46% {
+    opacity: 1;
+  }
+  71% {
+    opacity: 1;
+  }
+  72% {
+    opacity: 0.55;
+  }
+  74% {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.7);
   }
 }
 
@@ -191,5 +347,19 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* A marquee frozen at its start position is a legible list, which is what
+     the content is underneath the motion. */
+  .marquee-track {
+    animation: none !important;
+  }
+
+  /* Freeze the weather rather than snapping it to its end frame, and drop the
+     pointer parallax so the scene holds still. */
+  .scene-rain,
+  .scene-layer {
+    animation: none !important;
+    transform: none !important;
   }
 }

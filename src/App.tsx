@@ -1,5 +1,6 @@
 import { Footer } from "./components/layout/Footer";
 import { Header } from "./components/layout/Header";
+import { SideRail } from "./components/layout/SideRail";
 import { About } from "./components/sections/About";
 import { Contact } from "./components/sections/Contact";
 import { Hero } from "./components/sections/Hero";
@@ -13,15 +14,16 @@ function Site() {
   const { t } = useI18n();
 
   return (
-    <>
+    <div className="grain">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-fg focus:px-4 focus:py-2 focus:text-sm focus:text-bg"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:bg-fg focus:px-4 focus:py-2 focus:text-sm focus:text-bg"
       >
         {t.ui.skipToContent}
       </a>
 
       <Header />
+      <SideRail />
 
       <main id="main">
         <Hero />
@@ -32,7 +34,7 @@ function Site() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }
 

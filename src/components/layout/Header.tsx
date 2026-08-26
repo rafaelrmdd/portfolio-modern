@@ -20,13 +20,14 @@ function initials(name: string) {
     .toUpperCase();
 }
 
+const pad = (index: number) => String(index + 1).padStart(2, "0");
+
 export function Header() {
   const { t } = useI18n();
   const scrolled = useScrolled();
   const active = useActiveSection(SECTION_IDS);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // A scrollable page behind an open full-screen menu is disorienting on touch.
   useEffect(() => {
     if (!menuOpen) return;
 
@@ -45,51 +46,56 @@ export function Header() {
   }, [menuOpen]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 pt-3 sm:pt-4">
-      <Container>
-        <nav
-          aria-label={t.nav.menu}
-          className={`flex items-center justify-between rounded-full px-3 py-2 transition-colors duration-300 sm:px-4 ${
-            scrolled || menuOpen
-              ? "border border-line bg-surface/75 backdrop-blur-xl"
-              : "border border-transparent"
-          }`}
-        >
+    <header className="fixed inset-x-0 top-0 z-50">
+      <div
+        className={`transition-colors duration-300 ${
+          scrolled || menuOpen
+            ? "border-b border-line bg-bg/85 backdrop-blur-xl"
+            : "border-b border-transparent"
+        }`}
+      >
+        <Container className="flex h-16 items-center justify-between gap-6">
           <a
             href="#top"
-            className="font-display text-sm font-extrabold tracking-tight"
+            className="font-mono text-xs font-bold tracking-[0.2em] text-muted transition-colors hover:text-fg"
           >
-            <span className="text-gradient">{initials(t.hero.name)}</span>
+            [<span className="text-accent">{initials(t.hero.name)}</span>]
           </a>
 
-          <ul className="hidden items-center gap-1 md:flex">
-            {SECTION_IDS.map((id) => {
-              const isActive = active === id;
+          <nav aria-label={t.nav.menu} className="hidden md:block">
+            <ul className="flex items-center gap-8">
+              {SECTION_IDS.map((id, index) => {
+                const isActive = active === id;
 
-              return (
-                <li key={id}>
-                  <a
-                    href={`#${id}`}
-                    aria-current={isActive ? "true" : undefined}
-                    className={`relative block rounded-full px-3.5 py-1.5 text-sm transition-colors ${
-                      isActive ? "text-fg" : "text-muted hover:text-fg"
-                    }`}
-                  >
-                    {isActive && (
-                      <motion.span
-                        layoutId="nav-active"
-                        transition={{ type: "spring", stiffness: 400, damping: 34 }}
-                        className="absolute inset-0 -z-10 rounded-full bg-elevated"
-                      />
-                    )}
-                    {t.nav[id]}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+                return (
+                  <li key={id}>
+                    <a
+                      href={`#${id}`}
+                      aria-current={isActive ? "true" : undefined}
+                      className="group flex items-baseline gap-2"
+                    >
+                      <span
+                        className={`hud transition-colors ${
+                          isActive ? "text-accent" : "text-muted/45"
+                        }`}
+                      >
+                        {pad(index)}
+                      </span>
+                      <span
+                        className={`hud transition-colors ${
+                          isActive ? "text-fg" : "group-hover:text-fg"
+                        }`}
+                      >
+                        {t.nav[id]}
+                      </span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <LangToggle />
             <ThemeToggle />
             <button
@@ -97,13 +103,13 @@ export function Header() {
               onClick={() => setMenuOpen((open) => !open)}
               aria-expanded={menuOpen}
               aria-label={menuOpen ? t.nav.close : t.nav.menu}
-              className="grid h-9 w-9 place-items-center rounded-full border border-line text-fg transition-colors hover:bg-elevated md:hidden"
+              className="grid h-9 w-9 place-items-center text-fg ring-1 ring-line transition-colors hover:bg-elevated md:hidden"
             >
               {menuOpen ? <CloseIcon /> : <MenuIcon />}
             </button>
           </div>
-        </nav>
-      </Container>
+        </Container>
+      </div>
 
       <AnimatePresence>
         {menuOpen && (
@@ -112,27 +118,31 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 -z-10 bg-bg/95 backdrop-blur-xl md:hidden"
+            className="fixed inset-0 -z-10 bg-bg/97 backdrop-blur-xl md:hidden"
           >
-            <ul className="flex h-full flex-col justify-center gap-2 px-8">
+            <ul className="flex h-full flex-col justify-center gap-3 px-8">
               {SECTION_IDS.map((id, index) => (
                 <motion.li
                   key={id}
-                  initial={{ opacity: 0, y: 24 }}
+                  initial={{ opacity: 0, y: 26 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 12 }}
                   transition={{
-                    delay: 0.04 * index,
-                    duration: 0.35,
+                    delay: 0.05 * index,
+                    duration: 0.4,
                     ease: [0.22, 1, 0.36, 1],
                   }}
+                  className="border-b border-line pb-3"
                 >
                   <a
                     href={`#${id}`}
                     onClick={() => setMenuOpen(false)}
-                    className="font-display text-4xl font-extrabold tracking-tight text-fg"
+                    className="flex items-baseline gap-4"
                   >
-                    {t.nav[id]}
+                    <span className="hud text-accent">{pad(index)}</span>
+                    <span className="font-display text-4xl uppercase leading-none text-fg">
+                      {t.nav[id]}
+                    </span>
                   </a>
                 </motion.li>
               ))}

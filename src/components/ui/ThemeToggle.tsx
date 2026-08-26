@@ -18,15 +18,15 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label={label}
       title={label}
-      className="relative grid h-9 w-9 place-items-center overflow-hidden rounded-full border border-line text-fg transition-colors hover:bg-elevated"
+      className="relative grid h-9 w-9 place-items-center overflow-hidden text-fg ring-1 ring-line transition-colors hover:bg-elevated hover:text-accent"
     >
       <AnimatePresence initial={false} mode="wait">
         <motion.span
           key={theme}
-          initial={reduceMotion ? false : { y: 14, rotate: -70, opacity: 0 }}
-          animate={{ y: 0, rotate: 0, opacity: 1 }}
-          exit={reduceMotion ? { opacity: 0 } : { y: -14, rotate: 70, opacity: 0 }}
-          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          initial={reduceMotion ? false : { y: 14, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={reduceMotion ? { opacity: 0 } : { y: -14, opacity: 0 }}
+          transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
           className="absolute grid place-items-center"
         >
           {isDark ? <MoonIcon /> : <SunIcon />}

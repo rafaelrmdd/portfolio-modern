@@ -5,14 +5,14 @@ export function Footer() {
   const { t } = useI18n();
 
   return (
-    <footer className="border-t border-line py-10">
-      <Container className="flex flex-col items-start justify-between gap-4 text-sm text-muted sm:flex-row sm:items-center">
-        <p>
-          {new Date().getFullYear()} {t.hero.name}. {t.footer.note}
+    <footer className="border-t border-line py-8">
+      <Container className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="hud">
+          {new Date().getFullYear()} — {t.hero.name}
         </p>
-        <div className="flex items-center gap-4">
-          <span>{t.footer.builtWith}</span>
-          <a href="#top" className="transition-colors hover:text-fg">
+        <div className="flex items-center gap-6">
+          <span className="hud">{t.footer.builtWith}</span>
+          <a href="#top" className="hud transition-colors hover:text-accent">
             {t.ui.backToTop}
           </a>
         </div>

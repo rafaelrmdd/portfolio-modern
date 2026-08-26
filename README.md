@@ -1,9 +1,10 @@
 # portfolio-modern
 
-A one-page personal portfolio. Bold, gradient-led, bilingual (EN/PT), with a
-day/night theme that follows the OS preference until you override it.
+A one-page personal portfolio: cyberpunk-leaning, type-led, bilingual (EN/PT),
+with a day/night theme that follows the OS preference until you override it.
 
 Built with **Vite + React 19 + TypeScript + Tailwind CSS v4 + Motion**.
+Type is Anton (display), Space Grotesk (UI) and JetBrains Mono (the HUD labels).
 
 ## Getting started
 
@@ -30,26 +31,42 @@ whole reason this is a plain typed object instead of an i18n library.
 Adding a project is one entry in `projects.items` in each language. `repoUrl`
 and `liveUrl` are optional; the card renders only the links you supply.
 
-## The hero visual
+## The hero scene
 
-The hero artwork is deliberately unbuilt. `HeroVisual` in
-[`src/components/sections/HeroVisual.tsx`](src/components/sections/HeroVisual.tsx)
-reserves the space at its final dimensions with a dashed frame and a label.
+The artwork is **hand-authored SVG**, not an image file: a figure standing on a
+rooftop parapet looking out over a neon skyline. It lives in
+[`src/components/scene/`](src/components/scene/).
 
-When you decide what goes there — a shader, a particle field, a 3D object —
-replace the contents of that one component. Nothing else on the page moves:
-`Hero` only knows that something square-ish lives in that column. No WebGL
-dependency is installed yet, so the bundle carries no cost for the empty slot.
+It is drawn rather than shipped as a PNG so that it recolors with the theme
+(every fill reads a `--scene-*` custom property), stays sharp at any viewport,
+and costs a few KB instead of a few hundred.
+
+- `skyline.ts` generates each depth layer from a seeded PRNG — buildings,
+  setbacks, antennas and lit windows. Change a seed to reroll a layer.
+- `CityScene.tsx` composes sky, three skyline depths, rain, the rooftop and the
+  figure. The figure is drawn in a local 100 x 231 box and placed by a single
+  transform, so adjusting the pose means editing one small set of numbers.
+- Parallax is driven by `--mx` / `--my`, which `Hero` writes from pointer
+  position straight to CSS — the scene never re-renders on mousemove.
+
+The composition is centered horizontally on purpose: the SVG uses
+`preserveAspectRatio="xMidYMid slice"`, so a portrait viewport only shows the
+middle of the viewBox. Anything important placed near the left or right edge
+disappears on mobile.
 
 ## Theming
 
-The palette is **Ember**: a warm crimson-to-amber duotone on a near-neutral
-base, defined as CSS custom properties at the top of
-[`src/styles/index.css`](src/styles/index.css).
+Two palettes, authored separately rather than one inverted into the other, at
+the top of [`src/styles/index.css`](src/styles/index.css):
 
-Both themes are designed rather than derived — the light theme deepens the
-accent to hold contrast on paper-white, the dark theme brightens it so it
-glows. To reskin the whole site, change the values in `:root` and `.dark`;
+- **Dark — "Night City"**: blue-black, never neutral grey, lit by a rose/cyan
+  neon pair. The accents are the only saturated things on the page.
+- **Light — "Concrete"**: unbleached warm concrete, deliberately **not** white.
+  The reference is an overcast, smog-lit afternoon, so the neons survive into
+  daylight as deep ink versions of themselves instead of washing out.
+
+Each theme also defines its own `--scene-*` set, which is what makes the same
+SVG read as night and as overcast day. To reskin the whole site, change the values in `:root` and `.dark`;
 every component reads them through Tailwind theme tokens (`bg-bg`, `text-fg`,
 `border-line`, `text-accent`, `from-grad-from`, and so on), so nothing
 hardcodes a color.
@@ -71,10 +88,14 @@ the active locale.
 
 ## Layout
 
-One long page. `SECTION_IDS` in [`src/lib/sections.ts`](src/lib/sections.ts) is
-the single source for both the anchor targets and the keys used to look up nav
-labels, so navigation and content cannot drift apart. The header highlights the
-active link via an `IntersectionObserver` scroll-spy.
+One long page: hero, about, work, stack, contact. `SECTION_IDS` in
+[`src/lib/sections.ts`](src/lib/sections.ts) is the single source for the anchor
+targets, the section numbering (01–04) and the keys used to look up nav labels,
+so navigation and content cannot drift apart. The header highlights the active
+link via an `IntersectionObserver` scroll-spy.
+
+Work is a list of full-width rows rather than a card grid, and Stack is one
+scrolling marquee band per group rather than an icon wall.
 
 ## Accessibility notes
 
@@ -87,5 +108,5 @@ active link via an `IntersectionObserver` scroll-spy.
 ## Not included, on purpose
 
 No router, no CMS, no contact form or backend, no blog, no per-project detail
-pages, no tests, no analytics, and no deploy configuration. The build output in
+pages, no tests, no analytics, no WebGL, and no deploy configuration. The build output in
 `dist/` is a plain static bundle and will work on any static host.
