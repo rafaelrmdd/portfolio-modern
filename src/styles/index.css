@@ -99,6 +99,84 @@
     background-clip: text;
     color: transparent;
   }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    padding: 0.8rem 1.6rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1;
+    transition:
+      transform 200ms ease,
+      background-color 200ms ease,
+      color 200ms ease,
+      border-color 200ms ease;
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  /* Solid rather than gradient-filled: white text on the amber end of the
+     gradient fails contrast, and the gradient already carries the identity
+     through the headings and accents. */
+  .btn-primary {
+    background-color: var(--fg);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--accent);
+    color: #fff;
+  }
+
+  .btn-ghost {
+    border: 1px solid var(--line);
+    color: var(--fg);
+  }
+
+  .btn-ghost:hover {
+    background-color: var(--elevated);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .eyebrow::before {
+    content: "";
+    height: 0.45rem;
+    width: 0.45rem;
+    border-radius: 9999px;
+    background-image: linear-gradient(120deg, var(--grad-from), var(--grad-to));
+  }
+
+  /* Page atmosphere, not the hero visual - that slot stays deliberately empty.
+     Delete this block and its usage in Hero to remove it entirely. */
+  .gradient-wash {
+    background:
+      radial-gradient(
+        60rem 32rem at 15% -10%,
+        rgb(var(--glow) / 0.16),
+        transparent 70%
+      ),
+      radial-gradient(
+        40rem 26rem at 90% 0%,
+        rgb(var(--glow) / 0.09),
+        transparent 65%
+      );
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

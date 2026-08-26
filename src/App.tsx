@@ -1,5 +1,6 @@
 import { Footer } from "./components/layout/Footer";
 import { Header } from "./components/layout/Header";
+import { Hero } from "./components/sections/Hero";
 import { I18nProvider } from "./i18n/I18nProvider";
 import { useI18n } from "./i18n/useI18n";
 import { ThemeProvider } from "./theme/ThemeProvider";
@@ -19,9 +20,7 @@ function Site() {
       <Header />
 
       <main id="main">
-        <div id="top" className="grid min-h-dvh place-items-center px-6">
-          <p className="text-muted">Sections land here next.</p>
-        </div>
+        <Hero />
       </main>
 
       <Footer />
