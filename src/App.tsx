@@ -1,6 +1,10 @@
 import { Footer } from "./components/layout/Footer";
 import { Header } from "./components/layout/Header";
+import { About } from "./components/sections/About";
+import { Contact } from "./components/sections/Contact";
 import { Hero } from "./components/sections/Hero";
+import { Projects } from "./components/sections/Projects";
+import { Skills } from "./components/sections/Skills";
 import { I18nProvider } from "./i18n/I18nProvider";
 import { useI18n } from "./i18n/useI18n";
 import { ThemeProvider } from "./theme/ThemeProvider";
@@ -21,6 +25,10 @@ function Site() {
 
       <main id="main">
         <Hero />
+        <About />
+        <Projects />
+        <Skills />
+        <Contact />
       </main>
 
       <Footer />
